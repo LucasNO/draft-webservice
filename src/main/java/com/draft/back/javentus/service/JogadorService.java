@@ -25,7 +25,11 @@ public class JogadorService {
         return jogadorRepository.findOne(id);
     }
     
-    public Jogador save(Jogador jogador){
+    public Jogador save(Jogador jogador) {
+        return jogadorRepository.save(jogador);
+    }
+
+    public Jogador update(Jogador jogador) {
         return jogadorRepository.saveAndFlush(jogador);
     }
     

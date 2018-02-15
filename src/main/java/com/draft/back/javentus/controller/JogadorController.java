@@ -1,7 +1,6 @@
 package com.draft.back.javentus.controller;
 
 import com.draft.back.javentus.model.Jogador;
-import com.draft.back.javentus.model.Posicao;
 import com.draft.back.javentus.service.JogadorService;
 import java.util.List;
 import javax.transaction.Transactional;
