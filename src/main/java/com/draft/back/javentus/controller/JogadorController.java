@@ -40,6 +40,15 @@ public class JogadorController {
         }
         return ResponseEntity.ok(jogadores);
     }
+
+    @GetMapping("/free")
+    public ResponseEntity<List<Jogador>> getFreeAgents() {
+        List<Jogador> jogadores = jogadorService.carregarFreeAgents();
+        if (jogadores.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(jogadores);
+    }
     
     @GetMapping("/jogador/{id}")
     public ResponseEntity<Jogador> getJogadorById(@PathVariable("id") Integer id) {
