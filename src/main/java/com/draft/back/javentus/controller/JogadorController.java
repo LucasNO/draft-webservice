@@ -1,9 +1,12 @@
 package com.draft.back.javentus.controller;
 
 import com.draft.back.javentus.model.Jogador;
+import com.draft.back.javentus.model.Time;
 import com.draft.back.javentus.service.JogadorService;
 import java.util.List;
 import javax.transaction.Transactional;
+
+import com.draft.back.javentus.service.TimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,11 +29,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 @CrossOrigin
 @RestController
 @RequestMapping("/draft")
-
 public class JogadorController {
 
     @Autowired
     private JogadorService jogadorService;
+
+    @Autowired
+    private TimeService timeService;
 
     @GetMapping("/jogadores")
     public ResponseEntity<List<Jogador>> getJogadores() {
@@ -41,7 +46,7 @@ public class JogadorController {
         return ResponseEntity.ok(jogadores);
     }
 
-    @GetMapping("/free")
+    @GetMapping("/free-agents")
     public ResponseEntity<List<Jogador>> getFreeAgents() {
         List<Jogador> jogadores = jogadorService.carregarFreeAgents();
         if (jogadores.isEmpty()) {
@@ -63,7 +68,7 @@ public class JogadorController {
     
     @Transactional
     @PostMapping(path="/jogador")
-    public ResponseEntity<Void> addPosicao(@RequestBody Jogador jogador, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> addJogador(@RequestBody Jogador jogador, UriComponentsBuilder ucBuilder) {
         if (jogadorService.verificarJogadorJaCadastrada(jogador.getId())) {
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/jogador/{id}").buildAndExpand(jogador.getId()).toUri());
@@ -78,7 +83,7 @@ public class JogadorController {
     
     @Transactional
     @DeleteMapping(path="/jogador/{id}")
-    public ResponseEntity<Jogador> deletePosicao(@PathVariable("id") Integer id) {
+    public ResponseEntity<Jogador> deleteJogador(@PathVariable("id") Integer id) {
 
         Jogador jogador = jogadorService.findOne(id);
 
@@ -91,7 +96,7 @@ public class JogadorController {
     
     @Transactional
     @PutMapping(path="/jogador")
-    public ResponseEntity<Void> updatePosicao(@RequestBody Jogador jogador, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> updateJogador(@RequestBody Jogador jogador, UriComponentsBuilder ucBuilder) {
         if (!jogadorService.verificarJogadorNull(jogador)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
@@ -100,5 +105,39 @@ public class JogadorController {
             headers.setLocation(ucBuilder.path("/draft/jogador/{id}").buildAndExpand(jogador.getId()).toUri());
             return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
         }
+    }
+
+    @Transactional
+    @PostMapping(path="/contratar-jogador/{idTime}/{idJogador}")
+    public ResponseEntity<Jogador> contratarJogador(@PathVariable("idTime") Integer idTime, @PathVariable("idJogador") Integer idJogador) {
+
+        Jogador jogador = jogadorService.findOne(idJogador);
+
+        if (!jogadorService.verificarJogadorNull(jogador)) {
+            return ResponseEntity.noContent().build();
+        }
+
+        Time time = timeService.findOne(idTime);
+        if (!timeService.verificarTimeNull(time)) {
+            return ResponseEntity.noContent().build();
+        }
+
+        jogadorService.contratarJogador(time, jogador);
+        return ResponseEntity.ok(jogador);
+    }
+
+    @Transactional
+    @PostMapping(path="/dispensar-jogador/{idJogador}")
+    public ResponseEntity<Jogador> dispensarJogador(@PathVariable("idJogador") Integer idJogador) {
+
+        Jogador jogador = jogadorService.findOne(idJogador);
+
+        if (!jogadorService.verificarJogadorNull(jogador)) {
+            return ResponseEntity.noContent().build();
+        }
+
+
+        jogadorService.dispensarJogador(jogador);
+        return ResponseEntity.ok(jogador);
     }
 }

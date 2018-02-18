@@ -41,16 +41,14 @@ public class JogadorService {
         return jogadorRepository.carregarFreeAgents();
     }
     
-    public void contratarJogador(Time t, Integer idJogador){
-        Jogador j = findOne(idJogador);
-        j.setTim(t);
-        save(j);
+    public void contratarJogador(Time t, Jogador jogador){
+        jogador.setTim(t);
+        save(jogador);
     }
     
-    public void dispensarJogador(Integer idJogador){
-        Jogador j = findOne(idJogador);
-        j.setTim(null);
-        save(j);
+    public void dispensarJogador(Jogador jogador){
+        jogador.setTim(null);
+        save(jogador);
     }
 
     public boolean verificarJogadorNull(Jogador jogador) {
