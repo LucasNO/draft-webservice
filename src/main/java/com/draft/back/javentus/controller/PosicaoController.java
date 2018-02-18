@@ -55,7 +55,7 @@ public class PosicaoController {
     @Transactional
     @PostMapping(path="/posicao")
     public ResponseEntity<Void> addPosicao(@RequestBody Posicao posicao, UriComponentsBuilder ucBuilder) {
-        if (posicaoService.verificarPosicaoJaCadastrada(posicao.getId())) {
+        if (!posicaoService.posicaoJaCadastrada(posicao.getId())) {
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/posicao/{id}").buildAndExpand(posicao.getId()).toUri());
             return ResponseEntity.status(HttpStatus.CONFLICT).headers(headers).build();

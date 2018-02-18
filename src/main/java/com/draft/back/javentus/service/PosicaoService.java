@@ -44,7 +44,7 @@ public class PosicaoService {
         }
     }
 
-    public boolean verificarPosicaoJaCadastrada(Integer id) {
+    public boolean posicaoJaCadastrada(Integer id) {
         if (id != null) {
             Posicao posicao = findOne(id);
             return !verificarPosicaoNull(posicao);
