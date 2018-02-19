@@ -40,7 +40,7 @@ public class PosicaoController {
         }
         return ResponseEntity.ok(posicoes);
     }
-    
+
     @GetMapping("/posicao/{id}")
     public ResponseEntity<Posicao> getPosicaoById(@PathVariable("id") Integer id) {
 
@@ -51,24 +51,27 @@ public class PosicaoController {
         }
         return ResponseEntity.ok(posicao);
     }
-    
+
     @Transactional
-    @PostMapping(path="/posicao")
+    @PostMapping(path = "/posicao")
     public ResponseEntity<Void> addPosicao(@RequestBody Posicao posicao, UriComponentsBuilder ucBuilder) {
+        System.out.println("Chegou");
         if (posicaoService.posicaoJaCadastrada(posicao.getDescricao())) {
+            System.out.println("Posição já cadastrada");
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/posicao/{id}").buildAndExpand(posicao.getId()).toUri());
             return ResponseEntity.status(HttpStatus.CONFLICT).headers(headers).build();
         } else {
+            System.out.println("Cadastrar Posição");
             posicaoService.save(posicao);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/posicao/{id}").buildAndExpand(posicao.getId()).toUri());
             return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
         }
     }
-    
+
     @Transactional
-    @DeleteMapping(path="/posicao/{id}")
+    @DeleteMapping(path = "/posicao/{id}")
     public ResponseEntity<Posicao> deletePosicao(@PathVariable("id") Integer id) {
 
         Posicao posicao = posicaoService.findOne(id);
@@ -79,9 +82,9 @@ public class PosicaoController {
         posicaoService.delete(posicao.getId());
         return ResponseEntity.ok(posicao);
     }
-    
+
     @Transactional
-    @PutMapping(path="/posicao")
+    @PutMapping(path = "/posicao")
     public ResponseEntity<Void> updatePosicao(@RequestBody Posicao posicao, UriComponentsBuilder ucBuilder) {
         if (!posicaoService.verificarPosicaoNull(posicao)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
