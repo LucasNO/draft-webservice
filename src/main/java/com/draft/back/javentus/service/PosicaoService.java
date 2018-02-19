@@ -24,6 +24,10 @@ public class PosicaoService {
         return posicaoRepository.findOne(id);
     }
 
+    public Posicao findOnebyDescricao(String descricao) {
+        return posicaoRepository.findByDescricao(descricao);
+    }
+
     public Posicao save(Posicao posicao) {
         return posicaoRepository.save(posicao);
     }
@@ -44,10 +48,10 @@ public class PosicaoService {
         }
     }
 
-    public boolean posicaoJaCadastrada(Integer id) {
-        if (id != null) {
-            Posicao posicao = findOne(id);
-            return !verificarPosicaoNull(posicao);
+    public boolean posicaoJaCadastrada(String descricao) {
+        if (descricao != null) {
+            Posicao posicao = findOnebyDescricao(descricao);
+            return verificarPosicaoNull(posicao);
         }else{
             return Boolean.FALSE;
         }
