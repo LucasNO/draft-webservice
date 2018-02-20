@@ -14,7 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/draft")
 public class TimeController {

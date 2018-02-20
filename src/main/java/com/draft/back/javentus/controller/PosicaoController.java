@@ -23,7 +23,6 @@ import org.springframework.web.util.UriComponentsBuilder;
  *
  * @author lucas
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/draft")
 
