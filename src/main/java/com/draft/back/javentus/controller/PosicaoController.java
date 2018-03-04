@@ -57,12 +57,10 @@ public class PosicaoController {
     public ResponseEntity<Void> addPosicao(@RequestBody Posicao posicao, UriComponentsBuilder ucBuilder) {
         System.out.println("Chegou");
         if (posicaoService.posicaoJaCadastrada(posicao.getDescricao())) {
-            System.out.println("Posição já cadastrada");
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/posicao/{id}").buildAndExpand(posicao.getId()).toUri());
             return ResponseEntity.status(HttpStatus.CONFLICT).headers(headers).build();
         } else {
-            System.out.println("Cadastrar Posição");
             posicaoService.save(posicao);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/posicao/{id}").buildAndExpand(posicao.getId()).toUri());

@@ -46,7 +46,7 @@ public class TimeController {
     }
 
     @GetMapping("/time/{id}")
-    public ResponseEntity<Time> getTimesById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Time> getTimeById(@PathVariable("id") Integer id) {
 
         Time time = timeService.findOne(id);
 
