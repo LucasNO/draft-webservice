@@ -2,11 +2,13 @@ package com.draft.back.javentus.controller;
 
 import com.draft.back.javentus.model.Jogador;
 import com.draft.back.javentus.model.Time;
+import com.draft.back.javentus.model.Usuario;
 import com.draft.back.javentus.service.JogadorService;
 import java.util.List;
 import javax.transaction.Transactional;
 
 import com.draft.back.javentus.service.TimeService;
+import com.draft.back.javentus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/draft")
 public class JogadorController {
 
+    @Autowired
+    private UserService userService;
+    
     @Autowired
     private JogadorService jogadorService;
 
@@ -108,16 +113,18 @@ public class JogadorController {
     }
 
     @Transactional
-    @PostMapping(path="/contratar-jogador/{idTime}/{idJogador}")
-    public ResponseEntity<Jogador> contratarJogador(@PathVariable("idTime") Integer idTime, @PathVariable("idJogador") Integer idJogador) {
+    @PostMapping(path="/contratar-jogador/{email}/{idJogador}")
+    public ResponseEntity<Jogador> contratarJogador(@PathVariable("email") String email, @PathVariable("idJogador") Integer idJogador) {
 
         Jogador jogador = jogadorService.findOne(idJogador);
 
         if (!jogadorService.verificarJogadorNull(jogador)) {
             return ResponseEntity.noContent().build();
         }
-
-        Time time = timeService.findOne(idTime);
+        
+        Usuario usuario  = userService.findUserByEmail(email);
+        
+        Time time = timeService.carregarTimeUsuario(usuario);
         if (!timeService.verificarTimeNull(time)) {
             return ResponseEntity.noContent().build();
         }

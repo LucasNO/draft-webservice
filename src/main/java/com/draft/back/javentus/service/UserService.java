@@ -30,6 +30,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+    public Usuario findUserByNome(String nome) {
+        return userRepository.findByNome(nome);
+    }
+
     public void saveUser(Usuario user) {
         user.setAtivo(1);
         userRepository.save(user);
@@ -41,10 +45,10 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario applicationUser = findUserByEmail(username);
+        Usuario applicationUser = findUserByNome(username);
         if (applicationUser == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(applicationUser.getEmail(), applicationUser.getSenha(), emptyList());
+        return new User(applicationUser.getNome(), applicationUser.getSenha(), emptyList());
     }
 }

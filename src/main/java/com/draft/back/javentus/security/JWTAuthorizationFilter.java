@@ -5,7 +5,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import static com.draft.back.javentus.security.SecurityConstants.HEADER_STRING;
 import static com.draft.back.javentus.security.SecurityConstants.SECRET;
 import static com.draft.back.javentus.security.SecurityConstants.TOKEN_PREFIX;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -31,7 +31,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
         String header = req.getHeader(HEADER_STRING);
-
+    
         if (header == null || !header.startsWith(TOKEN_PREFIX)) {
             chain.doFilter(req, res);
             return;

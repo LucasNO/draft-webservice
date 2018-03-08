@@ -40,7 +40,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getEmail(),
+                            creds.getNome(),
                             creds.getSenha(),
                             new ArrayList<>())
             );
@@ -61,6 +61,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
                 .compact();
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
-        res.setHeader("usuario",((User) auth.getPrincipal()).getUsername());
+        res.getOutputStream().print(TOKEN_PREFIX + token);
     }
 }

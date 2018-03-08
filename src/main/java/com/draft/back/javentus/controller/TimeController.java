@@ -1,5 +1,6 @@
 package com.draft.back.javentus.controller;
 
+import com.draft.back.javentus.model.Jogador;
 import com.draft.back.javentus.model.Time;
 import com.draft.back.javentus.model.Usuario;
 import com.draft.back.javentus.service.TimeService;
@@ -45,15 +46,17 @@ public class TimeController {
         return ResponseEntity.ok(times);
     }
 
-    @GetMapping("/time/{id}")
-    public ResponseEntity<Time> getTimeById(@PathVariable("id") Integer id) {
+    @GetMapping("/time/{nome}")
+    public ResponseEntity<List<Jogador>> getTimeById(@PathVariable("nome") String nome){
 
-        Time time = timeService.findOne(id);
+        Usuario u = userService.findUserByNome(nome);
+        
+        Time time = timeService.carregarTimeUsuario(u);
 
         if (!timeService.verificarTimeNull(time)) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(time);
+        return ResponseEntity.ok(time.getJogadorList());
     }
 
     @Transactional
