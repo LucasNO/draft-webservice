@@ -113,8 +113,8 @@ public class JogadorController {
     }
 
     @Transactional
-    @PostMapping(path="/contratar-jogador/{email}/{idJogador}")
-    public ResponseEntity<Jogador> contratarJogador(@PathVariable("email") String email, @PathVariable("idJogador") Integer idJogador) {
+    @PostMapping(path="/contratar-jogador/{idJogador}/{nome}")
+    public ResponseEntity<Jogador> contratarJogador(@PathVariable("idJogador") Integer idJogador, @PathVariable("nome") String nome) {
 
         Jogador jogador = jogadorService.findOne(idJogador);
 
@@ -122,7 +122,7 @@ public class JogadorController {
             return ResponseEntity.noContent().build();
         }
         
-        Usuario usuario  = userService.findUserByEmail(email);
+        Usuario usuario  = userService.findUserByNome(nome);
         
         Time time = timeService.carregarTimeUsuario(usuario);
         if (!timeService.verificarTimeNull(time)) {

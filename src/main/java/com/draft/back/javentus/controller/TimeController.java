@@ -1,8 +1,10 @@
 package com.draft.back.javentus.controller;
 
-import com.draft.back.javentus.model.Jogador;
+import com.draft.back.javentus.dto.JogadorDto;
+import com.draft.back.javentus.dto.TimeDto;
 import com.draft.back.javentus.model.Time;
 import com.draft.back.javentus.model.Usuario;
+import com.draft.back.javentus.service.JogadorService;
 import com.draft.back.javentus.service.TimeService;
 import com.draft.back.javentus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class TimeController {
 
     @Autowired
     private TimeService timeService;
+    
+    @Autowired
+    private JogadorService jogadorService;
 
     @Autowired
     private UserService userService;
@@ -36,18 +41,18 @@ public class TimeController {
     }
 
 
-    @GetMapping("/times-adversarios/{idUsuario}")
-    public ResponseEntity<List<Time>> getTimesAdversarios(@PathVariable("idUsuario") Integer idUsuario) {
-        Usuario usuario = userService.findOne(idUsuario);
+    @GetMapping("/times-adversarios/{nome}")
+    public ResponseEntity<List<TimeDto>> getTimesAdversarios(@PathVariable("nome") String nome) {
+        Usuario usuario = userService.findUserByNome(nome);
         List<Time> times = timeService.findAllAdversarios(usuario);
         if (times.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(times);
+        return ResponseEntity.ok(timeService.preencheDtoTimes(times));
     }
 
     @GetMapping("/time/{nome}")
-    public ResponseEntity<List<Jogador>> getTimeById(@PathVariable("nome") String nome){
+    public ResponseEntity<List<JogadorDto>> getTimeById(@PathVariable("nome") String nome){
 
         Usuario u = userService.findUserByNome(nome);
         
@@ -56,7 +61,7 @@ public class TimeController {
         if (!timeService.verificarTimeNull(time)) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(time.getJogadorList());
+        return ResponseEntity.ok(jogadorService.preencheDtoJogador(time));
     }
 
     @Transactional
