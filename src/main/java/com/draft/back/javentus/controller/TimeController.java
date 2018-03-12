@@ -61,7 +61,7 @@ public class TimeController {
         if (!timeService.verificarTimeNull(time)) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(jogadorService.preencheDtoJogador(time));
+        return ResponseEntity.ok(jogadorService.preencheDtoJogador(time.getJogadorList()));
     }
 
     @Transactional

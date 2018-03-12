@@ -73,9 +73,13 @@ public class TimeService {
         List<TimeDto> list = new ArrayList<>();
         for (Time t : times) {
             TimeDto dto = TimeDto.builder().idTime(t.getId()).nomeTime(t.getNome()).build();
-            dto.setJogadores(jogadorService.preencheDtoJogador(t));
+            dto.setJogadores(jogadorService.preencheDtoJogador(t.getJogadorList()));
             list.add(dto);
         }
         return list;
+    }
+
+    public Time findByNome(String nome) {
+        return timeRepository.findByNome(nome);
     }
 }

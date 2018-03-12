@@ -18,5 +18,11 @@ public class JogadorDto {
     private int overall;
 
     private String posicao;
+
+    private int idPosicao;
+
+    private String nomeTime;
+
+    private int idTime;
     
 }

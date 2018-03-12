@@ -15,6 +15,9 @@ public interface TimeRepository extends JpaRepository<Time, Integer>{
 
     @Query("select tim from Time tim where tim.usr <> :usuario")
     public List<Time> carregarTimesAdversarios(@Param("usuario") Usuario u);
-        
+
+    Time findByNome(String nome);
+
+
     
 }

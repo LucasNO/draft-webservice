@@ -1,12 +1,15 @@
 package com.draft.back.javentus.controller;
 
+import com.draft.back.javentus.dto.JogadorDto;
 import com.draft.back.javentus.model.Jogador;
+import com.draft.back.javentus.model.Posicao;
 import com.draft.back.javentus.model.Time;
 import com.draft.back.javentus.model.Usuario;
 import com.draft.back.javentus.service.JogadorService;
 import java.util.List;
 import javax.transaction.Transactional;
 
+import com.draft.back.javentus.service.PosicaoService;
 import com.draft.back.javentus.service.TimeService;
 import com.draft.back.javentus.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +45,16 @@ public class JogadorController {
     @Autowired
     private TimeService timeService;
 
+    @Autowired
+    private PosicaoService posicaoService;
+
     @GetMapping("/jogadores")
-    public ResponseEntity<List<Jogador>> getJogadores() {
+    public ResponseEntity<List<JogadorDto>> getJogadores() {
         List<Jogador> jogadores = jogadorService.findAll();
         if (jogadores.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(jogadores);
+        return ResponseEntity.ok(jogadorService.preencheDtoJogador(jogadores));
     }
 
     @GetMapping("/free-agents")
@@ -79,6 +85,8 @@ public class JogadorController {
             headers.setLocation(ucBuilder.path("/draft/jogador/{id}").buildAndExpand(jogador.getId()).toUri());
             return ResponseEntity.status(HttpStatus.CONFLICT).headers(headers).build();
         } else {
+            Posicao p = posicaoService.findOne(jogador.getPos().getId());
+            jogador.setPos(p);
             jogadorService.save(jogador);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/jogador/{id}").buildAndExpand(jogador.getId()).toUri());
@@ -105,6 +113,10 @@ public class JogadorController {
         if (!jogadorService.verificarJogadorNull(jogador)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
+            Posicao p = posicaoService.findOne(jogador.getPos().getId());
+            jogador.setPos(p);
+            Time t = timeService.findOne(jogador.getTim().getId());
+            jogador.setTim(t);
             jogadorService.update(jogador);
             HttpHeaders headers = new HttpHeaders();
             headers.setLocation(ucBuilder.path("/draft/jogador/{id}").buildAndExpand(jogador.getId()).toUri());

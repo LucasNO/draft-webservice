@@ -2,6 +2,7 @@ package com.draft.back.javentus.service;
 
 import com.draft.back.javentus.dto.JogadorDto;
 import com.draft.back.javentus.model.Jogador;
+import com.draft.back.javentus.model.Posicao;
 import com.draft.back.javentus.model.Time;
 import com.draft.back.javentus.repository.JogadorRepository;
 import java.util.ArrayList;
@@ -70,14 +71,17 @@ public class JogadorService {
         }
     }
 
-    public List<JogadorDto> preencheDtoJogador(Time t) {
+    public List<JogadorDto> preencheDtoJogador(List<Jogador> jogadores) {
         List<JogadorDto> list = new ArrayList<>();
-        for (Jogador j : t.getJogadorList()) {
+        for (Jogador j : jogadores) {
             list.add(JogadorDto.builder()
                     .idJogador(j.getId())
                     .nomeJogador(j.getNome())
                     .overall(j.getOverall())
                     .posicao(j.getPos().getDescricao())
+                    .idPosicao(j.getPos().getId())
+                    .idTime(j.getTim() != null ? j.getTim().getId():0)
+                    .nomeTime(j.getTim() != null ? j.getTim().getNome():"")
                     .build());
         }
         return list;
