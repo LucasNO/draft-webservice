@@ -1,7 +1,9 @@
 package com.draft.back.javentus.service;
 
+import com.draft.back.javentus.dto.TabelaTitulos;
 import com.draft.back.javentus.model.Titulos;
 import com.draft.back.javentus.repository.TitulosRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,6 @@ public class TitulosService {
         return titulosRepository.findAll();
     }
     
-    public List<Titulos> listarTitulos(){
-        return titulosRepository.findByOrderByPrimeiroDescSegundoDescTerceiroDescQuartoDescQuintoDesc();
-    }
-    
     public Titulos findOne(Integer id){
         return titulosRepository.findOne(id);
     }
@@ -38,5 +36,9 @@ public class TitulosService {
     
     public void delete(Integer id) {
         titulosRepository.delete(id);
+    }
+    
+    public List<TabelaTitulos> carregarTitulos(){
+        return titulosRepository.carregarTitulos();
     }
 }

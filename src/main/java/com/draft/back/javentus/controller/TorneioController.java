@@ -1,5 +1,6 @@
 package com.draft.back.javentus.controller;
 
+import com.draft.back.javentus.dto.TabelaTitulos;
 import com.draft.back.javentus.model.TipoTorneio;
 import com.draft.back.javentus.model.Titulos;
 import com.draft.back.javentus.model.Torneio;
@@ -31,8 +32,8 @@ public class TorneioController {
     private TorneioService torneioService;
 
     @GetMapping("/titulos")
-    public ResponseEntity<List<Titulos>> getTimes() {
-        List<Titulos> titulos = titulosService.listarTitulos();
+    public ResponseEntity<List<TabelaTitulos>> getTimes() {
+        List<TabelaTitulos> titulos = titulosService.carregarTitulos();
         if (titulos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -43,7 +44,7 @@ public class TorneioController {
     @GetMapping("/torneio-ativo")
     public ResponseEntity<Torneio> getTorneioAtivo() {
         Torneio torneioAtivo= torneioService.carregarTorneioAtivo();
-        if (torneioAtivo != null && torneioAtivo.getId() != null) {
+        if (torneioAtivo == null || torneioAtivo.getId() == null) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(torneioAtivo);

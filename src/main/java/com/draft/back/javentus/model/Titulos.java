@@ -27,20 +27,8 @@ public class Titulos implements Serializable {
     @Column(name = "tit_id")
     private Integer id;
     
-    @Column(name = "tit_primeiro")
-    private Integer primeiro;
-    
-    @Column(name = "tit_segundo")
-    private Integer segundo;
-    
-    @Column(name = "tit_terceiro")
-    private Integer terceiro;
-    
-    @Column(name = "tit_quarto")
-    private Integer quarto;
-    
-    @Column(name = "tit_quinto")
-    private Integer quinto;
+    @Column(name = "tit_posicao")
+    private Integer posicao;
     
     @JoinColumn(name = "usr_id", referencedColumnName = "usr_id")
     @ManyToOne
